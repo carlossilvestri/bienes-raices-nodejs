@@ -1,6 +1,6 @@
 //@ts-ignore
 import express, { Request, Response, NextFunction } from "express"
-import userRoutes from "./backend/user/infrastructure/userRoutes"
+import mainRoutes from "./shared/routes/mainRoutes"
 import path from "path";
 /* INIT APP */
 const app = express()
@@ -8,14 +8,13 @@ const app = express()
 // Enable PUG
 
 app.set("view engine", "pug")
-app.set("views", path.join(__dirname, './frontend'))
+app.set("views", path.join(__dirname, '../frontend'))
 
+// Public folder. Now: We can have access to localhost/css/*
+app.use(express.static(path.join(__dirname, '../frontend/public')))
 
 // Routing
-app.get('/', (req: Request, res: Response, next: NextFunction) => {
-    res.send(`Hola mundo en express`)
-})
-app.use('/user', userRoutes)
+app.use('/', mainRoutes)
 
 // Definir puerto y arrancar el proyecto
 const port : number = 3000
