@@ -1,12 +1,15 @@
-//@ts-ignore
-import express, { Request, Response, NextFunction } from "express"
+import express from "express"
 import mainRoutes from "./shared/routes/mainRoutes"
 import path from "path";
+import { connectionToSequelize } from "./shared/config/data_base/sequelize";
+
 /* INIT APP */
 const app = express()
 
-// Enable PUG
+// Sequelize connection | Connection to Database
+connectionToSequelize()
 
+// Enable PUG
 app.set("view engine", "pug")
 app.set("views", path.join(__dirname, '../frontend'))
 

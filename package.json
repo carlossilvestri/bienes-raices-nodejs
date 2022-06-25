@@ -6,11 +6,12 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
-    "prod": "tsc && npm run copyFolder && npm run start",
+    "prod": "npm run clean && tsc && npm run copyFolder && npm run start",
     "copyFolder": "copyfiles --u 1 ./src/frontend/** ./dist",
     "dev": "ts-node-dev --respawn --transpile-only ./src/backend/app.ts",
     "start": "node ./dist/backend/app.js",
-    "css": "postcss ./src/frontend/public/css/tailwind.css -o ./src/frontend/public/css/app.css --watch"
+    "css": "postcss ./src/frontend/public/css/tailwind.css -o ./src/frontend/public/css/app.css --watch",
+    "clean": "rimraf dist"
   },
   "keywords": [
     "MCV",
@@ -37,6 +38,7 @@
     "nodemon": "^2.0.18",
     "postcss": "^8.4.14",
     "postcss-cli": "^9.1.0",
+    "rimraf": "^3.0.2",
     "tailwindcss": "^3.1.4",
     "ts-node-dev": "^1.1.8"
   }
