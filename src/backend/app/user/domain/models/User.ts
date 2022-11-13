@@ -1,5 +1,7 @@
 import { DataTypes } from "sequelize";
-import { sequelizeConnection } from "../../../shared/domain/config/data_base/sequelize";
+import bcrypt from "bcrypt"
+import { sequelizeConnection } from "../../../shared/global/domain/config/data_base/sequelize";
+import { User as UserEntity } from "../entities/User";
 
 export const User = sequelizeConnection.define('user', {
     user_uuid: {
@@ -22,4 +24,15 @@ export const User = sequelizeConnection.define('user', {
     },
     token: DataTypes.STRING,
     isConfirmed: DataTypes.BOOLEAN,
-})
+},
+{
+    hooks: {
+        //@ts-ignore
+        beforeCreate: async function(user : UserEntity){
+            const salt = await bcrypt.genSalt(10)
+            user.password = await bcrypt.hash(user.password, salt)
+        }
+    }
+}
+
+)

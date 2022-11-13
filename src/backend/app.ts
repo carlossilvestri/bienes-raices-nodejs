@@ -2,8 +2,8 @@ import express from 'express'
 import path from 'path'
 import dotenv from 'dotenv'
 dotenv.config()
-import mainRoutes from './shared/infrastructure/routes/mainRoutes'
-import { connectionToSequelize } from './shared/domain/config/data_base/sequelize';
+import mainRoutes from './app/shared/global/infrastructure/routes/mainRoutes'
+import { connectionToSequelize } from './app/shared/global/domain/config/data_base/sequelize';
 
 /* INIT APP */
 const app = express()

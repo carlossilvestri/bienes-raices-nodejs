@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express"
+import { body, check, validationResult } from "express-validator";
 import httpStatus from 'http-status';
 import createUserInteractor from "../../application/interactors/create"
 import { User } from "../../domain/entities/User"
@@ -31,8 +32,23 @@ export const forgetPasswordForm = (req: Request, res: Response, next: NextFuncti
 
 /* This method should be used for POST and PUT */
 export const saveUser = async (req: Request, res: Response, next: NextFunction) => {
+    // Get data
+    const { name, email, password } = req.body
+    let objToSend : any = { page: 'Crear Cuenta', message: "Hemos Enviado un Email de Confirmación, presiona en el enlace",  user: { name, email }}
+    // Express validator
+    await check('repeat_password').equals(password).withMessage('Las contraseñas no son iguales').run(req)
+
+    let result = validationResult(req)
+    // Check the result is empty.
+    if(!result.isEmpty()){
+        // Errors
+        objToSend.errors = result.array()
+        return res.render('views/pug/auth/register', objToSend)
+    }
+    const userCreated: any = await createUserInteractor(req)
+    if(userCreated.error) objToSend.errors = [{msg: userCreated.msg}]
     
-    const userCreated : User = await createUserInteractor(req)
-    const objToSend = { page: 'Usuario creado'}
-    res.status(httpStatus.CREATED).json({ data: userCreated})
+    objToSend.page = "Cuenta Creada Correctamente"
+    res.render("views/pug/templates/message", objToSend)
+    // res.status(httpStatus.CREATED).json({ data: userCreated})
 }

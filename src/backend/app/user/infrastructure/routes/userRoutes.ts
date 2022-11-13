@@ -1,5 +1,7 @@
 import { Router, Request, Response, NextFunction } from "express"
 import { loginForm, registerForm, forgetPasswordForm, saveUser } from "../controllers/userController"
+import { createUserMiddleware } from "../middlewares/userMiddlewares"
+
 const router = Router()
 
 // Routing
@@ -11,7 +13,7 @@ router.route('/login')
 
 router.route('/register')
         .get(registerForm)
-        .post(saveUser)
+        .post([createUserMiddleware], saveUser)
         
 router.route('/forget-password')
         .get(forgetPasswordForm)
